@@ -1,0 +1,27 @@
+{
+  "name": "mercadolibre-nodejs",
+  "version": "0.0.1",
+  "description": "NodeJS wrapper for mercadolibre API communication",
+  "url": "https://github.com/pentagramacs/mercadolibre-nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pentagramacs/mercadolibre-nodejs.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "mercadolivre",
+    "mercadolibre",
+    "api",
+    "wrapper"
+  ],
+  "author": "Victor Moura <victor.moura@pentagrama.com.br>",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}
