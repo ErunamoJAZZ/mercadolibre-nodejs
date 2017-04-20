@@ -37,11 +37,15 @@ class Auth extends Base
      * @return Promise
      */
     get accessToken() {
-        var ac = this.manager.access_token;
+        var self = this;
+        var ac = self.manager.access_token;
 
         if (ac && !ac.is_valid)
         {
-            return ac.refresh();
+            return ac.refresh().then(function(ac) {
+                self.manager.emit('token.refresh', ac);
+                return Promise.resolve(ac);
+            });
         }
 
         return Promise.resolve(ac);
@@ -95,7 +99,7 @@ class Auth extends Base
             result.redirect_uri = null;
             result.is_valid = true;
 
-            self.manager.acess_token = result;
+            self.manager.access_token = result;
 
             return Promise.resolve(result);
         });
