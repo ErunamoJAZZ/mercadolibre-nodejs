@@ -109,6 +109,30 @@ const Meli        = (function() {
         {
             return new Collection(this, collection_id);
         }
+
+        items(item_id)
+        {
+            return this.item(item_id);
+        }
+
+        orders(order_id)
+        {
+            return this.order(order_id);
+        }
+
+        collections(collection_id)
+        {
+            return this.collection(collection_id);
+        }
+
+        resource(resource)
+        {
+            var parts = resource.split('/');
+            var id = parts.pop();
+            resource = parts.pop();
+
+            return this[resource](id);
+        }
    }
 }());
 
