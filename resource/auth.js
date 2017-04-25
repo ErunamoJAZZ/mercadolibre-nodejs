@@ -1,10 +1,10 @@
-const Base = require('./base');
 const AccessToken = require('../model/access_token');
 const URL = require('url');
 
-class Auth extends Base
+class Auth extends require('./base')
 {
-    get auth_endpoint() {
+    get auth_endpoint()
+    {
         return {
             'MLA': 'https://auth.mercadolibre.com.ar', // Argentina
             'MLB': 'https://auth.mercadolivre.com.br', // Brasil
@@ -25,18 +25,20 @@ class Auth extends Base
             'MPE': 'https://auth.mercadolibre.com.pe', // Peru
             'MPT': 'https://auth.mercadolibre.com.pt', // Portugal
             'MLU': 'https://auth.mercadolibre.com.uy', // Uruguay
-            'MLV': 'https://auth.mercadolibre.com.ve', // Venezuela
+            'MLV': 'https://auth.mercadolibre.com.ve' // Venezuela
         };
     }
 
-    get token_endpoint() {
+    get token_endpoint()
+    {
         return "/oauth/token";
     }
 
     /**
      * @return Promise
      */
-    get accessToken() {
+    get accessToken()
+    {
         var self = this;
         var ac = self.manager.access_token;
 
@@ -63,7 +65,8 @@ class Auth extends Base
     /**
      * @return Promise
      */
-    newAccessToken(code, redirect_uri) {
+    newAccessToken(code, redirect_uri)
+    {
         var url = this.manager.endpoint;
 
         url.pathname = this.token_endpoint;
@@ -86,7 +89,8 @@ class Auth extends Base
     /**
      * @return Promise
      */
-    refreshToken(refresh_token) {
+    refreshToken(refresh_token)
+    {
         const self = this;
         var url = this.manager.endpoint;
         url.pathname = this.token_endpoint;

@@ -19,7 +19,8 @@ var Base = (function()
             manager = meli;
         }
 
-        get manager() {
+        get manager()
+        {
             return manager;
         }
     };

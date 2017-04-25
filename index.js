@@ -7,7 +7,8 @@ const Collection  = require('./resource/collection');
 const Site        = require('./model/site');
 const Category    = require('./model/category');
 
-const Meli        = (function() {
+const Meli        = (function()
+{
 
     var site = 'MLB';
     var endpoint = "https://api.mercadolibre.com/";

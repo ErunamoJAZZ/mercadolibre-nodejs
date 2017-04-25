@@ -1,7 +1,6 @@
-const Base = require('./base');
 const CollectionModel = require('../model/collection');
 
-class Collection extends Base
+class Collection extends require('./base')
 {
     get endpoint()
     {

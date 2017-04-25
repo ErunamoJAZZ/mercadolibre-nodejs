@@ -1,7 +1,6 @@
-const Base = require('./base');
 const ItemModel = require('../model/item');
 
-class Item extends Base
+class Item extends require('./base')
 {
     get endpoint()
     {
