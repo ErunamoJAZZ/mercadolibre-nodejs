@@ -1,6 +1,5 @@
 const Base = require('./base');
 const ItemModel = require('../model/item');
-const URL = require('url');
 
 class Item extends Base
 {

@@ -4,6 +4,9 @@ const Auth        = require('./resource/auth');
 const Item        = require('./resource/item');
 const Order       = require('./resource/order');
 const Collection  = require('./resource/collection');
+const Site        = require('./model/site');
+const Category    = require('./model/category');
+
 const Meli        = (function() {
 
     var site = 'MLB';
@@ -40,12 +43,12 @@ const Meli        = (function() {
                 access_token:  args.shift(),
                 refresh_token: args.shift()
             });
-        };
+        }
 
         get endpoint()
         {
             return new URL.parse(endpoint, true);
-        };
+        }
 
         /**
          * Change or return the site used by this wrapper
@@ -62,7 +65,7 @@ const Meli        = (function() {
 
             site = site_id.toUpperCase();
             return this;
-        };
+        }
 
         site(site_id)
         {
@@ -75,9 +78,8 @@ const Meli        = (function() {
                 site_id = '';
             }
 
-            const Site = require('./model/site');
             return this.get('/sites' + site_id, Site);
-        };
+        }
 
         categories(site_id)
         {
@@ -86,9 +88,8 @@ const Meli        = (function() {
                 site_id = this.defaultSite();
             }
 
-            const Category  = require('./model/category');
             return this.get('/sites/' + site_id + '/categories', Category);
-        };
+        }
 
         get auth()
         {

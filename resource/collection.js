@@ -1,6 +1,5 @@
 const Base = require('./base');
 const CollectionModel = require('../model/collection');
-const URL = require('url');
 
 class Collection extends Base
 {
