@@ -124,6 +124,11 @@ const Meli        = (function()
             return new Question(this, question_id);
         }
 
+        shipment(shipment_id)
+        {
+            return new Shipment(this, shipment_id);
+        }
+
         items(item_id)
         {
             return this.item(item_id);
@@ -142,6 +147,11 @@ const Meli        = (function()
         questions(question_id)
         {
             return this.question(question_id);
+        }
+
+        shipments(shipment_id)
+        {
+            return this.shipment(shipment_id);
         }
 
         resource(resource)
