@@ -1,9 +1,16 @@
+// Dependencies
 const URL         = require('url');
 const Requester   = require('./lib/requester');
+
+// Resources
 const Auth        = require('./resource/auth');
 const Item        = require('./resource/item');
 const Order       = require('./resource/order');
 const Collection  = require('./resource/collection');
+const Question    = require('./resource/question');
+const Shipment    = require('./resource/shipment');
+
+// Models
 const Site        = require('./model/site');
 const Category    = require('./model/category');
 
@@ -112,6 +119,11 @@ const Meli        = (function()
             return new Collection(this, collection_id);
         }
 
+        question(question_id)
+        {
+            return new Question(this, question_id);
+        }
+
         items(item_id)
         {
             return this.item(item_id);
@@ -127,6 +139,11 @@ const Meli        = (function()
             return this.collection(collection_id);
         }
 
+        questions(question_id)
+        {
+            return this.question(question_id);
+        }
+
         resource(resource)
         {
             var parts = resource.split('/');
@@ -135,6 +152,18 @@ const Meli        = (function()
 
             return this[resource](id);
         }
+
+        // Proxies
+        payment(payment_id)
+        {
+            return this.collection(payment_id);
+        }
+
+        payments(payment_id)
+        {
+            return this.payment(payment_id);
+        }
+
    }
 }());
 
