@@ -5,7 +5,10 @@ exports = module.exports = (function() {
         constructor(meli, data)
         {
             manager = meli;
-            Object.assign(this, data);
+            if (data)
+            {
+                Object.assign(this, data);
+            }
         }
 
         get manager()
