@@ -9,6 +9,7 @@ const Order       = require('./resource/order');
 const Collection  = require('./resource/collection');
 const Question    = require('./resource/question');
 const Shipment    = require('./resource/shipment');
+const Message     = require('./resource/message');
 
 // Models
 const Site        = require('./model/site');
@@ -127,6 +128,16 @@ const Meli        = (function()
         shipment(shipment_id)
         {
             return new Shipment(this, shipment_id);
+        }
+
+        message(message_id)
+        {
+            return new Message(this, message_id);
+        }
+
+        messages(message_id)
+        {
+            return this.message(message_id);
         }
 
         items(item_id)
