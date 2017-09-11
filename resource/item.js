@@ -38,33 +38,34 @@ class Item extends require('./base')
         params.offset = (per_page * (page - 1));
         params.limit  = per_page;
 
-        return this.manager.get(endpoint, ItemModel);
+        return this.manager.get(endpoint, ItemModel, params);
     }
 
     all(user_id, params)
     {
        var self = this;
        return new Promise(function(resolve, reject) {
-           var page = 1, items = [];
+           var page = 1, items = [], promiseTail;
 
            var load = function(page) {
-               return self.search(user_id, params, 100, page).then(process);
+               return promiseTail = self.search(user_id, params, 100, page).then(process);
            };
 
            var process = function(result) {
                result.results.forEach(function(item) {
                    items.push(item);
                });
-               if (result.paging.total > ((page) * 100)) {
+
+               if (((page) * 100) < result.paging.total) {
                    page++;
                    return load(page);
-               } else {
-                   return resolve(items);
                }
            };
 
-           return load(page);
-       }); 
+           return load(page).then(() => {
+               resolve(items);
+           });
+       });
     }
 }
 
