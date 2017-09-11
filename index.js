@@ -10,6 +10,7 @@ const Collection  = require('./resource/collection');
 const Question    = require('./resource/question');
 const Shipment    = require('./resource/shipment');
 const Message     = require('./resource/message');
+const Feed        = require('./resource/feed');
 
 // Models
 const Site        = require('./model/site');
@@ -183,6 +184,11 @@ const Meli        = (function()
         payments(payment_id)
         {
             return this.payment(payment_id);
+        }
+
+        feed(app_id)
+        {
+            return new Feed(this, app_id);
         }
 
    }

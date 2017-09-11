@@ -1,6 +1,6 @@
 {
   "name": "mercadolibre-nodejs",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "NodeJS wrapper for mercadolibre API communication",
   "url": "https://github.com/pentagramacs/mercadolibre-nodejs",
   "main": "index.js",
