@@ -11,6 +11,12 @@ const Meli = require('mercadolibre-nodejs');
 var meli = new Meli('client_id', 'client_secret'[, 'access_token'][, 'refresh_token']);
 ```
 
+### Enable new response format
+
+```js
+meli.setUseNewFormat(true)
+```
+
 ### API
 
 With Meli instantiated:

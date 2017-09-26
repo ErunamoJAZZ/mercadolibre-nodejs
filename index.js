@@ -53,10 +53,14 @@ const Meli        = (function()
                 access_token:  args.shift(),
                 refresh_token: args.shift()
             });
+            this.useNewFormat = false;
         }
 
-        get endpoint()
-        {
+        setUseNewFormat(use) {
+            this.useNewFormat = use;
+        }
+
+        get endpoint() {
             return new URL.parse(endpoint, true);
         }
 
