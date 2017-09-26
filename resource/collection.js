@@ -1,9 +1,7 @@
 const CollectionModel = require('../model/collection');
 
-class Collection extends require('./base')
-{
-    get endpoint()
-    {
+class Collection extends require('./base') {
+    get endpoint() {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/collections/{collection_id}';
         return endpoint;
@@ -14,12 +12,10 @@ class Collection extends require('./base')
     *
     * @param {Meli} manager
     */
-    constructor(meli, collection)
-    {
+    constructor(meli, collection) {
         super(meli);
 
-        if (collection)
-        {
+        if (collection) {
             var endpoint = this.endpoint;
             endpoint.pathname = endpoint.pathname.replace('{collection_id}', collection);
             return this.manager.get(endpoint, CollectionModel);

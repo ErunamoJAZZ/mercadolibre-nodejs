@@ -2,18 +2,15 @@ exports = module.exports = (function() {
     var manager;
 
     return class Base {
-        constructor(meli, data)
-        {
+        constructor(meli, data) {
             manager = meli;
-            if (data)
-            {
+            if (data) {
                 Object.assign(this, data);
             }
         }
 
-        get manager()
-        {
+        get manager() {
             return manager;
         }
-    }
+    };
 }());

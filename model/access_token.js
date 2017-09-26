@@ -1,8 +1,7 @@
 var Base = require('./base');
 
 exports = module.exports = class AccessToken extends Base {
-    constructor(manager, accessToken)
-    {
+    constructor(manager, accessToken) {
         super(manager, accessToken);
     }
 
@@ -10,8 +9,7 @@ exports = module.exports = class AccessToken extends Base {
     * @return Promise
     */
     refresh() {
-        if (!this.refresh_token)
-        {
+        if (!this.refresh_token) {
             throw Error('We can not refresh an access_token without a refresh_token');
         }
 
@@ -25,4 +23,4 @@ exports = module.exports = class AccessToken extends Base {
     toString() {
         return this.access_token;
     }
-}
+};

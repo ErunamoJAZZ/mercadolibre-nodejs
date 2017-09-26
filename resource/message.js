@@ -1,9 +1,7 @@
 const MessageModel = require('../model/message');
 
-class Message extends require('./base')
-{
-    get endpoint()
-    {
+class Message extends require('./base') {
+    get endpoint() {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/messages/{message_id}';
         return endpoint;
@@ -14,12 +12,10 @@ class Message extends require('./base')
     *
     * @param {Meli} manager
     */
-    constructor(meli, message)
-    {
+    constructor(meli, message) {
         super(meli);
 
-        if (message)
-        {
+        if (message) {
             var endpoint = this.endpoint;
             endpoint.pathname = endpoint.pathname.replace('{message_id}', message);
             return this.manager.get(endpoint, MessageModel);

@@ -1,10 +1,8 @@
 const UserModel = require('../model/shipment');
-const InvoiceModel = require('../model/invoice');
+// const InvoiceModel = require('../model/invoice');
 
-class User extends require('./base')
-{
-    get endpoint()
-    {
+class User extends require('./base') {
+    get endpoint() {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/user/{id}';
         return endpoint;
@@ -15,56 +13,48 @@ class User extends require('./base')
     *
     * @param {Meli} manager
     */
-    constructor(meli, id)
-    {
+    constructor(meli, id) {
         super(meli, UserModel, id);
 
         this.id = id;
     }
 
-    endpointSearch()
-    {
+    endpointSearch() {
         var endpoint = this.endpoint;
         endpoint.pathname += '/items/search';
         return endpoint;
     }
 
-    items(statuses, limit, page)
-    {
-        if (!statuses)
-        {
+    items(statuses, limit, page) {
+        if (!statuses) {
             statuses = [];
         }
 
-        if (!page)
-        {
+        if (!page) {
             page = 1;
         }
 
-        if (!limit)
-        {
+        if (!limit) {
             limit = 100;
         }
 
-        if (limit == 'all')
-        {
-           throw new Error('This is a @TODO');
+        if (limit == 'all') {
+            throw new Error('This is a @TODO');
         }
 
         let offset = (50 * (page - 1)); 
 
         let params = {
-           page: page,
-           limit: limit,
-           offset: offset
+            page: page,
+            limit: limit,
+            offset: offset
         };
 
-        if (statuses.length)
-        {
-           params['status'] = statuses.join(',');
+        if (statuses.length) {
+            params['status'] = statuses.join(',');
         }
 
-        return this.manager.get(endpointSearch(), undefined, params);
+        return this.manager.get(this.endpointSearch(), undefined, params);
     }
 }
 

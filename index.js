@@ -16,19 +16,17 @@ const Feed        = require('./resource/feed');
 const Site        = require('./model/site');
 const Category    = require('./model/category');
 
-const Meli        = (function()
-{
+const Meli        = (function() {
 
     var site = 'MLB';
-    var endpoint = "https://api.mercadolibre.com/";
+    var endpoint = 'https://api.mercadolibre.com/';
 
     /**
      * Entrance class wrapper
      *
      * @version 0.0.1
      */
-    return class extends Requester
-    {
+    return class extends Requester {
 
         /**
          * Meli Constructor
@@ -38,12 +36,10 @@ const Meli        = (function()
          * @param {string} [access_token]
          * @param {string} [refresh_token]
          */
-        constructor(... args)
-        {
+        constructor(... args) {
             super();
 
-            if (args.length < 2)
-            {
+            if (args.length < 2) {
                 throw Error('You must set at least client_id and client_secret');
             }
 
@@ -70,10 +66,8 @@ const Meli        = (function()
          * @param {string} [site_id]
          * @return {Meli}
          */
-        defaultSite(site_id)
-        {
-            if (!site_id)
-            {
+        defaultSite(site_id) {
+            if (!site_id) {
                 return site;
             }
 
@@ -81,97 +75,77 @@ const Meli        = (function()
             return this;
         }
 
-        site(site_id)
-        {
-            if (site_id)
-            {
+        site(site_id) {
+            if (site_id) {
                 site_id = '/' + site_id;
-            }
-            else
-            {
+            } else {
                 site_id = '';
             }
 
             return this.get('/sites' + site_id, Site);
         }
 
-        categories(site_id)
-        {
-            if (!site_id)
-            {
+        categories(site_id) {
+            if (!site_id) {
                 site_id = this.defaultSite();
             }
 
             return this.get('/sites/' + site_id + '/categories', Category);
         }
 
-        get auth()
-        {
+        get auth() {
             return new Auth(this);
         }
 
-        item(item_id)
-        {
+        item(item_id) {
             return new Item(this, item_id);
         }
 
-        order(order_id)
-        {
+        order(order_id) {
             return new Order(this, order_id);
         }
 
-        collection(collection_id)
-        {
+        collection(collection_id) {
             return new Collection(this, collection_id);
         }
 
-        question(question_id)
-        {
+        question(question_id) {
             return new Question(this, question_id);
         }
 
-        shipment(shipment_id)
-        {
+        shipment(shipment_id) {
             return new Shipment(this, shipment_id);
         }
 
-        message(message_id)
-        {
+        message(message_id) {
             return new Message(this, message_id);
         }
 
-        messages(message_id)
-        {
+        messages(message_id) {
             return this.message(message_id);
         }
 
-        items(item_id)
-        {
+        items(item_id) {
             return this.item(item_id);
         }
 
-        orders(order_id)
-        {
+        orders(order_id) {
             return this.order(order_id);
         }
 
-        collections(collection_id)
-        {
+        collections(collection_id) {
             return this.collection(collection_id);
         }
 
-        questions(question_id)
-        {
+        questions(question_id) {
             return this.question(question_id);
         }
 
-        shipments(shipment_id)
-        {
+        shipments(shipment_id) {
             return this.shipment(shipment_id);
         }
 
-        resource(resource)
-        {
+        resource(resource) {
             var parts = resource.split('/');
             var id = parts.pop();
             resource = parts.pop();
@@ -180,22 +154,19 @@ const Meli        = (function()
         }
 
         // Proxies
-        payment(payment_id)
-        {
+        payment(payment_id) {
             return this.collection(payment_id);
         }
 
-        payments(payment_id)
-        {
+        payments(payment_id) {
             return this.payment(payment_id);
         }
 
-        feed(app_id)
-        {
+        feed(app_id) {
             return new Feed(this, app_id);
         }
 
-   }
+    };
 }());
 
 exports = module.exports = Meli;

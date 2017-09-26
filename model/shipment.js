@@ -1,5 +1,5 @@
 var Base = require('./base');
-var ShipmentResource = require('../resource/shipment');
+// var ShipmentResource = require('../resource/shipment');
 
 class Shipment extends Base {
 

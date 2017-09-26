@@ -1,10 +1,8 @@
 const AccessToken = require('../model/access_token');
 const URL = require('url');
 
-class Auth extends require('./base')
-{
-    get auth_endpoint()
-    {
+class Auth extends require('./base') {
+    get auth_endpoint() {
         return {
             'MLA': 'https://auth.mercadolibre.com.ar', // Argentina
             'MLB': 'https://auth.mercadolivre.com.br', // Brasil
@@ -29,21 +27,18 @@ class Auth extends require('./base')
         };
     }
 
-    get token_endpoint()
-    {
-        return "/oauth/token";
+    get token_endpoint() {
+        return '/oauth/token';
     }
 
     /**
      * @return Promise
      */
-    get accessToken()
-    {
+    get accessToken() {
         var self = this;
         var ac = self.manager.access_token;
 
-        if (ac && !ac.is_valid)
-        {
+        if (ac && !ac.is_valid) {
             return ac.refresh().then(function(ac) {
                 self.manager.emit('token.refresh', ac);
                 return Promise.resolve(ac);
@@ -53,8 +48,7 @@ class Auth extends require('./base')
         return Promise.resolve(ac);
     }
 
-    static createAccessToken(manager, args)
-    {
+    static createAccessToken(manager, args) {
         var ac = new AccessToken(manager, args);
         ac.redirect_uri = null;
         ac.is_valid = true;
@@ -65,8 +59,7 @@ class Auth extends require('./base')
     /**
      * @return Promise
      */
-    newAccessToken(code, redirect_uri)
-    {
+    newAccessToken(code, redirect_uri) {
         var url = this.manager.endpoint;
 
         url.pathname = this.token_endpoint;
@@ -89,8 +82,7 @@ class Auth extends require('./base')
     /**
      * @return Promise
      */
-    refreshToken(refresh_token)
-    {
+    refreshToken(refresh_token) {
         const self = this;
         var url = this.manager.endpoint;
         url.pathname = this.token_endpoint;
@@ -109,10 +101,8 @@ class Auth extends require('./base')
         });
     }
 
-    url(redirect_uri, site_id)
-    {
-        if (!site_id)
-        {
+    url(redirect_uri, site_id) {
+        if (!site_id) {
             site_id = this.manager.defaultSite();
         }
 
@@ -122,8 +112,7 @@ class Auth extends require('./base')
         url.query['client_id'] = this.manager.client_id;
         url.query['response_type'] = 'code';
 
-        if (redirect_uri)
-        {
+        if (redirect_uri) {
             url.query['redirect_uri'] = redirect_uri;
         }
 

@@ -1,9 +1,7 @@
 const ItemModel = require('../model/item');
 
-class Item extends require('./base')
-{
-    get endpoint()
-    {
+class Item extends require('./base') {
+    get endpoint() {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/items/{item_id}';
         return endpoint;
@@ -14,20 +12,17 @@ class Item extends require('./base')
     *
     * @param {Meli} manager
     */
-    constructor(meli, item)
-    {
+    constructor(meli, item) {
         super(meli);
 
-        if (item)
-        {
+        if (item) {
             var endpoint = this.endpoint;
             endpoint.pathname = endpoint.pathname.replace('{item_id}', item);
             return this.manager.get(endpoint, ItemModel);
         }
     }
 
-    search(user_id, params, per_page, page)
-    {
+    search(user_id, params, per_page, page) {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/users/{user_id}/items/search'.replace('{user_id}', user_id);
 
@@ -41,31 +36,37 @@ class Item extends require('./base')
         return this.manager.get(endpoint, ItemModel, params);
     }
 
-    all(user_id, params)
-    {
-       var self = this;
-       return new Promise(function(resolve, reject) {
-           var page = 1, items = [], promiseTail;
+    all(user_id, params) {
+        var self = this;
 
-           var load = function(page) {
-               return promiseTail = self.search(user_id, params, 100, page).then(process);
-           };
+        return new Promise(function(resolve, reject) {
+            var page = 1, items = [], promiseTail;
 
-           var process = function(result) {
-               result.results.forEach(function(item) {
-                   items.push(item);
-               });
+            if (!user_id) {
+                throw new Error('user_id parameter is required');
+            }
 
-               if (((page) * 100) < result.paging.total) {
-                   page++;
-                   return load(page);
-               }
-           };
+            var load = function(page) {
+                return promiseTail = self.search(user_id, params, 100, page).then(process);
+            };
 
-           return load(page).then(() => {
-               resolve(items);
-           });
-       });
+            var process = function(result) {
+                result.results.forEach(function(item) {
+                    items.push(item);
+                });
+
+                if (((page) * 100) < result.paging.total) {
+                    page++;
+                    return load(page);
+                }
+            };
+
+            return load(page).then(() => {
+                resolve(items);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
     }
 }
 
