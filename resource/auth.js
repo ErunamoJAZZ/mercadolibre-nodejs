@@ -61,6 +61,7 @@ class Auth extends require('./base') {
      */
     newAccessToken(code, redirect_uri) {
         var url = this.manager.endpoint;
+        var self = this;
 
         url.pathname = this.token_endpoint;
         url.query['grant_type'] = 'authorization_code';
@@ -70,6 +71,15 @@ class Auth extends require('./base') {
         url.query['redirect_uri'] = redirect_uri;
 
         return this.manager.post(url, null, AccessToken).then(function(result) {
+            if (result.error) {
+                result.is_valid = false;
+                let err = new Error(result.message);
+                err.error_code = result.error;
+                err.cause = result.cause;
+                err.code = result.status;
+                throw err;
+            }
+
             result.redirect_uri = redirect_uri;
             result.is_valid = true;
 
@@ -83,7 +93,7 @@ class Auth extends require('./base') {
      * @return Promise
      */
     refreshToken(refresh_token) {
-        const self = this;
+        var self = this;
         var url = this.manager.endpoint;
         url.pathname = this.token_endpoint;
         url.query['grant_type'] = 'refresh_token';
@@ -92,6 +102,15 @@ class Auth extends require('./base') {
         url.query['refresh_token'] = refresh_token;
 
         return this.manager.post(url, null, AccessToken).then(function(result) {
+            if (result.error) { 
+                result.is_valid = false;
+                let err = new Error(result.message);
+                err.error_code = result.error;
+                err.cause = result.cause;
+                err.code = result.status;
+                throw err;
+            }
+
             result.redirect_uri = null;
             result.is_valid = true;
 

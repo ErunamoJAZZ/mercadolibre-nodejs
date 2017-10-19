@@ -15,6 +15,7 @@ const Feed        = require('./resource/feed');
 // Models
 const Site        = require('./model/site');
 const Category    = require('./model/category');
+const Service     = require('./model/service');
 
 const Meli        = (function() {
 
@@ -91,6 +92,14 @@ const Meli        = (function() {
             }
 
             return this.get('/sites/' + site_id + '/categories', Category);
+        }
+
+        shipping_services(site_id, service_id) {
+            if (!site_id) {
+                site_id = this.defaultSite();
+            }
+
+            return this.get('/sites/' + site_id + '/shipping_services' + (service_id ? `/${service_id}` : ''), Service);
         }
 
         get auth() {
