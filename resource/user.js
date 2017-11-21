@@ -1,10 +1,16 @@
-const UserModel = require('../model/shipment');
+const UserModel = require('../model/user');
 // const InvoiceModel = require('../model/invoice');
 
 class User extends require('./base') {
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/user/{id}';
+        endpoint.pathname = '/users/{id}';
+        return endpoint;
+    }
+
+    get endpointSearch() {
+        var endpoint = this.endpoint;
+        endpoint.pathname += '/items/search';
         return endpoint;
     }
 
@@ -19,42 +25,16 @@ class User extends require('./base') {
         this.id = id;
     }
 
-    endpointSearch() {
-        var endpoint = this.endpoint;
-        endpoint.pathname += '/items/search';
-        return endpoint;
+    me() {
+        const endpoint = this.endpoint;
+        endpoint.pathname = endpoint.pathname.replace('/{id}', '/me');
+        return this.manager.get(endpoint, UserModel, {});
     }
 
-    items(statuses, limit, page) {
-        if (!statuses) {
-            statuses = [];
-        }
-
-        if (!page) {
-            page = 1;
-        }
-
-        if (!limit) {
-            limit = 100;
-        }
-
-        if (limit == 'all') {
-            throw new Error('This is a @TODO');
-        }
-
-        let offset = (50 * (page - 1)); 
-
-        let params = {
-            page: page,
-            limit: limit,
-            offset: offset
-        };
-
-        if (statuses.length) {
-            params['status'] = statuses.join(',');
-        }
-
-        return this.manager.get(this.endpointSearch(), undefined, params);
+    get(user_id) {
+        const endpoint = this.endpoint;
+        endpoint.pathname = endpoint.pathname.replace('/{id}', `/${user_id}`);
+        return this.manager.get(endpoint, UserModel, {});
     }
 }
 

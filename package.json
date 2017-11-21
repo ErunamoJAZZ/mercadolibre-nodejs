@@ -23,6 +23,6 @@
   "license": "MIT",
   "dependencies": {
     "eslint": "^4.7.2",
-    "request": "^2.81.0"
+    "request": "^2.83.0"
   }
 }

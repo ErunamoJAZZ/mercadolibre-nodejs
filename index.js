@@ -11,6 +11,7 @@ const Question    = require('./resource/question');
 const Shipment    = require('./resource/shipment');
 const Message     = require('./resource/message');
 const Feed        = require('./resource/feed');
+const User        = require('./resource/user');
 
 // Models
 const Site        = require('./model/site');
@@ -106,6 +107,10 @@ const Meli        = (function() {
             return new Auth(this);
         }
 
+        user(user_id) {
+            return new User(this, user_id);
+        }
+
         item(item_id) {
             return new Item(this, item_id);
         }
@@ -130,6 +135,15 @@ const Meli        = (function() {
             return new Message(this, message_id);
         }
 
+        resource(resource) {
+            var parts = resource.split('/');
+            var id = parts.pop();
+            resource = parts.pop();
+
+            return this[resource](id);
+        }
+
+        // Proxies
         messages(message_id) {
             return this.message(message_id);
         }
@@ -154,21 +168,16 @@ const Meli        = (function() {
             return this.shipment(shipment_id);
         }
 
-        resource(resource) {
-            var parts = resource.split('/');
-            var id = parts.pop();
-            resource = parts.pop();
-
-            return this[resource](id);
-        }
-
-        // Proxies
         payment(payment_id) {
             return this.collection(payment_id);
         }
 
         payments(payment_id) {
             return this.payment(payment_id);
+        }
+
+        users(user_id) {
+            return this.user(user_id);
         }
 
         feed(app_id) {
