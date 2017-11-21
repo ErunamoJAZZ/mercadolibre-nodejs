@@ -136,9 +136,16 @@ const Meli        = (function() {
         }
 
         resource(resource) {
-            var parts = resource.split('/');
-            var id = parts.pop();
-            resource = parts.pop();
+            var parts = resource.split('/'), id;
+            if (parts.length == 1) {
+                // only resource with single string is message *for now*
+                // @TODO send the topic instead of only the resource
+                id = parts.pop();
+                resource = 'messages';
+            } else {
+                id = parts.pop();
+                resource = parts.pop();
+            }
 
             return this[resource](id);
         }
