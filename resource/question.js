@@ -1,10 +1,25 @@
 const QuestionModel = require('../model/question');
 
 class Question extends require('./base') {
+    
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/questions/{question_id}';
+        endpoint.pathname = '/questions/{id}';
         return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return QuestionModel;
     }
 
     /**
@@ -16,9 +31,7 @@ class Question extends require('./base') {
         super(meli);
 
         if (question) {
-            var endpoint = this.endpoint;
-            endpoint.pathname = endpoint.pathname.replace('{question_id}', question);
-            return this.manager.get(endpoint, QuestionModel);
+            return this.fetch(question);
         }
     }
 }

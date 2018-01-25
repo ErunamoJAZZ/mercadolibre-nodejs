@@ -1,10 +1,25 @@
 const MessageModel = require('../model/message');
 
 class Message extends require('./base') {
+    
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/messages/{message_id}';
+        endpoint.pathname = '/messages/{id}';
         return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return MessageModel;
     }
 
     /**
@@ -16,9 +31,7 @@ class Message extends require('./base') {
         super(meli);
 
         if (message) {
-            var endpoint = this.endpoint;
-            endpoint.pathname = endpoint.pathname.replace('{message_id}', message);
-            return this.manager.get(endpoint, MessageModel);
+            return this.fetch(message);
         }
     }
 }

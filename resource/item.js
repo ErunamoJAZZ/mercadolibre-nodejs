@@ -1,10 +1,25 @@
 const ItemModel = require('../model/item');
 
 class Item extends require('./base') {
+    
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/items/{item_id}';
+        endpoint.pathname = '/items/{id}';
         return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return ItemModel;
     }
 
     /**
@@ -16,13 +31,12 @@ class Item extends require('./base') {
         super(meli);
 
         if (item) {
-            var endpoint = this.endpoint;
-            endpoint.pathname = endpoint.pathname.replace('{item_id}', item);
-            return this.manager.get(endpoint, ItemModel);
+            return this.fetch(item);
         }
     }
 
     search(user_id, params, per_page, page) {
+        // @TODO replace this with a request from users resources
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/users/{user_id}/items/search'.replace('{user_id}', user_id);
 

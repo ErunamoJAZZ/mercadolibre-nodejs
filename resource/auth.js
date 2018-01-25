@@ -59,7 +59,7 @@ class Auth extends require('./base') {
     /**
      * @return Promise
      */
-    newAccessToken(code, redirect_uri) {
+    exchangeAccessToken(code, redirect_uri) {
         var url = this.manager.endpoint;
         var self = this;
 
@@ -90,6 +90,45 @@ class Auth extends require('./base') {
     }
 
     /**
+     * AT=`curl -s -X POST -H 'content-type: application/x-www-form-urlencoded' \
+     * 'https://api.mercadopago.com/oauth/token' -d 'grant_type=client_credentials' \
+     * -d 'client_id=695869161068019' -d 'client_secret=AhJxvPDsCrWVyULWq5483k9nwury7uhY' \
+     * | grep -o '"access_token":"[^"]*"' | sed -n 's/.*"access_token":"\(.*\)"/\1/p'`
+     * curl -X POST \
+     * -H "Content-Type: application/json" \
+     * "https://api.mercadopago.com/users/test_user?access_token=$AT" \
+     * -d '{"site_id":"MLB"}'
+     * @return Promise
+     */
+    newAccessToken() {
+        var url = this.manager.endpoint;
+        var self = this;
+
+        url.pathname = this.token_endpoint;
+        url.query['grant_type'] = 'client_credentials';
+        url.query['client_id'] = this.manager.client_id;
+        url.query['client_secret'] = this.manager.client_secret;
+
+        return this.manager.post(url, null, AccessToken).then(function(result) {
+            if (result.error) {
+                result.is_valid = false;
+                let err = new Error(result.message);
+                err.error_code = result.error;
+                err.cause = result.cause;
+                err.code = result.status;
+                throw err;
+            }
+
+            result.redirect_uri = null;
+            result.is_valid = true;
+
+            self.manager.acess_token = result;
+
+            return Promise.resolve(result);
+        });
+    }
+
+    /**
      * @return Promise
      */
     refreshToken(refresh_token) {
@@ -108,7 +147,7 @@ class Auth extends require('./base') {
                 err.error_code = result.error;
                 err.cause = result.cause;
                 err.code = result.status;
-                throw err;
+                return Promise.reject(err);
             }
 
             result.redirect_uri = null;

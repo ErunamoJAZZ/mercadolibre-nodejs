@@ -135,17 +135,8 @@ const Meli        = (function() {
             return new Message(this, message_id);
         }
 
-        resource(resource) {
-            var parts = resource.split('/'), id;
-            if (parts.length == 1) {
-                // only resource with single string is message *for now*
-                // @TODO send the topic instead of only the resource
-                id = parts.pop();
-                resource = 'messages';
-            } else {
-                id = parts.pop();
-                resource = parts.pop();
-            }
+        resource(res) {
+            const { resource, id } = this._prepareResource(res);
 
             return this[resource](id);
         }
@@ -191,6 +182,20 @@ const Meli        = (function() {
             return new Feed(this, app_id);
         }
 
+        _prepareResource(resource) {
+            var parts = resource.split('/'), id;
+            if (parts.length == 1) {
+                // only resource with single string is message *for now*
+                // @TODO send the topic instead of only the resource
+                id = parts.pop();
+                resource = 'messages';
+            } else {
+                id = parts.pop();
+                resource = parts.pop();
+            }
+
+            return { id, resource };
+        }
     };
 }());
 

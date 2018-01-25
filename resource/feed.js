@@ -1,10 +1,25 @@
 const FeedModel = require('../model/feed');
 
 class Feed extends require('./base') {
+
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/myfeeds';
         return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return FeedModel;
     }
 
     /**
@@ -39,7 +54,7 @@ class Feed extends require('./base') {
             params.after = after;
         }
 
-        return self.manager.get(self.endpoint, FeedModel, params).then((ret) => {
+        return this.fetch().then((ret) => {
             const messages = ret.messages;
             const notifications = [];
 

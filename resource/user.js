@@ -2,16 +2,47 @@ const UserModel = require('../model/user');
 // const InvoiceModel = require('../model/invoice');
 
 class User extends require('./base') {
+
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
         endpoint.pathname = '/users/{id}';
         return endpoint;
     }
 
+    /**
+     * Resource search endpoint
+     * 
+     * @return {URL}
+     */
     get endpointSearch() {
         var endpoint = this.endpoint;
         endpoint.pathname += '/items/search';
         return endpoint;
+    }
+
+    /**
+     * Resource search endpoint
+     * 
+     * @return {URL}
+     */
+    get endpointTest() {
+        var endpoint = this.endpoint;
+        endpoint.pathname += '/users/test_user';
+        return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return UserModel;
     }
 
     /**
@@ -20,21 +51,34 @@ class User extends require('./base') {
     * @param {Meli} manager
     */
     constructor(meli, id) {
-        super(meli, UserModel, id);
+        super(meli);
 
-        this.id = id;
+        if (id) {
+            return this.fetch(id);
+        }
     }
 
+    /**
+     * Returns the current user
+     * 
+     * @return {Promise}
+     */
     me() {
-        const endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('/{id}', '/me');
-        return this.manager.get(endpoint, UserModel, {});
+        return this.fetch('me');
     }
 
+    /**
+     * @deprecated
+     */
     get(user_id) {
-        const endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('/{id}', `/${user_id}`);
-        return this.manager.get(endpoint, UserModel, {});
+        return this.fetch(user_id);
+    }
+
+    /**
+     * @deprecated
+     */
+    createTest(site_id) {
+        return this.fetch(user_id);
     }
 }
 

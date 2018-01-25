@@ -1,10 +1,25 @@
 const CollectionModel = require('../model/collection');
 
 class Collection extends require('./base') {
+
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/collections/{collection_id}';
+        endpoint.pathname = '/collections/{id}';
         return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return CollectionModel;
     }
 
     /**
@@ -16,9 +31,7 @@ class Collection extends require('./base') {
         super(meli);
 
         if (collection) {
-            var endpoint = this.endpoint;
-            endpoint.pathname = endpoint.pathname.replace('{collection_id}', collection);
-            return this.manager.get(endpoint, CollectionModel);
+            return this.fetch(collection);
         }
     }
 }

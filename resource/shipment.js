@@ -2,10 +2,25 @@ const ShipmentModel = require('../model/shipment');
 const InvoiceModel = require('../model/invoice');
 
 class Shipment extends require('./base') {
+    
+    /**
+     * Resource endpoint
+     * 
+     * @return {URL}
+     */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/shipments/{shipment_id}';
+        endpoint.pathname = '/shipments/{id}';
         return endpoint;
+    }
+
+    /**
+     * Returns the resource model
+     * 
+     * @return {Model\Base}
+     */
+    get model() {
+        return ShipmentModel;
     }
 
     /**
@@ -17,18 +32,23 @@ class Shipment extends require('./base') {
         super(meli, ShipmentModel);
 
         if (shipment) {
-            var endpoint = this.endpoint;
-            endpoint.pathname = endpoint.pathname.replace('{shipment_id}', shipment);
-            return this.manager.get(endpoint, ShipmentModel);
+            return this.fetch(shipment);
         }
     }
 
+    /**
+     * @deprecated
+     */
     get(shipment_id) {
-        var endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('{shipment_id}', shipment_id);
-        return this.manager.get(endpoint, ShipmentModel);
+        return this.fetch(shipment_id);
     }
 
+    /**
+     * [invoice description]
+     * @param  {[type]} shipment_id [description]
+     * @param  {[type]} site_id     [description]
+     * @return {[type]}             [description]
+     */
     invoice(shipment_id, site_id) {
         if (!site_id) {
             site_id = this.manager.defaultSite();
@@ -39,7 +59,7 @@ class Shipment extends require('./base') {
         }
 
         var endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('{shipment_id}', shipment_id);
+        endpoint.pathname = endpoint.pathname.replace('{id}', shipment_id);
         endpoint.pathname += '/invoice_data';
 
         return this.manager.get(endpoint, InvoiceModel, { siteId: site_id });
