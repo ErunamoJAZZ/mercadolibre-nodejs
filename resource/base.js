@@ -56,10 +56,10 @@ const Base = (function() {
          * @param  {Object} params Parameters to be sent within the resource
          * @return {Promise}        Promise that resolves the request to the model
          */
-        fetch(id = '', params = {}) {
-            let endpoint = this.endpoint;
-            endpoint.pathname = endpoint.pathname.replace('/{id}', id ? '/' + id : '');
-            return this.manager.get(endpoint, this.model, params);
+        fetch(id = '', params = {}, endpoint, model) {
+            let useEndpoint = endpoint || this.endpoint;
+            useEndpoint.pathname = useEndpoint.pathname.replace('/{id}', id ? '/' + id : '');
+            return this.manager.get(useEndpoint, model || this.model, params);
         }
     };
 }());
