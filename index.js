@@ -190,8 +190,8 @@ const Meli        = (function() {
                 id = parts.pop();
                 resource = 'messages';
             } else {
-                id = parts.pop();
-                resource = parts.pop();
+                resource = parts.shift();
+                id = parts.join('/');
             }
 
             return { id, resource };
