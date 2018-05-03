@@ -1,4 +1,5 @@
 const ShipmentModel = require('../model/shipment');
+const CostModel = require('../model/shipment/cost');
 const InvoiceModel = require('../model/invoice');
 
 class Shipment extends require('./base') {
@@ -97,7 +98,7 @@ class Shipment extends require('./base') {
         endpoint.pathname = endpoint.pathname.replace('{id}', shipment_id);
         endpoint.pathname += '/costs';
 
-        return this.manager.get(endpoint, {}, { access_token: this.manager.access_token.toString() });
+        return this.manager.get(endpoint, CostModel, { access_token: this.manager.access_token.toString() });
     }
 
 }
