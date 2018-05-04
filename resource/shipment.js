@@ -1,6 +1,7 @@
 const ShipmentModel = require('../model/shipment');
 const CostModel = require('../model/shipment/cost');
-const InvoiceModel = require('../model/invoice');
+const ItemModel = require('../model/shipment/item');
+const InvoiceModel = require('../model/shipment/invoice');
 
 class Shipment extends require('./base') {
     
@@ -21,8 +22,30 @@ class Shipment extends require('./base') {
      * @return {URL}
      */
     get endpointItems() {
-        var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/shipments/{id}/items';
+        var endpoint = this.endpoint;
+        endpoint.pathname += '/items';
+        return endpoint;
+    }
+ 
+    /**
+     * Resource endpoint items
+     * 
+     * @return {URL}
+     */
+    get endpointCosts() {
+        var endpoint = this.endpoint;
+        endpoint.pathname += '/costs';
+        return endpoint;
+    }
+
+    /**
+     * Resource endpoint items
+     * 
+     * @return {URL}
+     */
+    get endpointInvoice() {
+        var endpoint = this.endpoint;
+        endpoint.pathname += '/invoice_data';
         return endpoint;
     }
 
@@ -40,11 +63,14 @@ class Shipment extends require('./base') {
     *
     * @param {Meli} manager
     */
-    constructor(meli, shipment) {
+    constructor(meli, shipment, load = true) {
         super(meli, ShipmentModel);
 
         if (shipment) {
-            return this.fetch(shipment);
+            this.id = shipment;
+            if (load) {
+                return this.fetch(shipment);
+            }
         }
     }
 
@@ -56,10 +82,12 @@ class Shipment extends require('./base') {
     }
 
     /**
-     * @deprecated
+     * [items description]
+     * @param  {[type]} shipment_id [description]
+     * @return {[type]}             [description]
      */
     items(shipment_id) {
-        return this.fetch(shipment_id, {}, this.endpointItems);
+        return this.fetch(shipment_id, {}, this.endpointItems, ItemModel);
     }
 
     /**
@@ -73,15 +101,11 @@ class Shipment extends require('./base') {
             site_id = this.manager.defaultSite();
         }
 
-        if (!shipment_id) {
+        if (!shipment_id && !this.id) {
             throw new Error('You need to pass an shipment_id to fetch invoice_data');
         }
 
-        var endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('{id}', shipment_id);
-        endpoint.pathname += '/invoice_data';
-
-        return this.manager.get(endpoint, InvoiceModel, { siteId: site_id });
+        return this.fetch(shipment_id || this.id, { siteId: site_id }, this.endpointInvoice, InvoiceModel);
     }
 
     /**
@@ -90,15 +114,11 @@ class Shipment extends require('./base') {
      * @return {[type]}             [description]
      */
     costs(shipment_id) {
-        if (!shipment_id) {
+        if (!shipment_id && !this.id) {
             throw new Error('You need to pass an shipment_id to fetch costs');
         }
 
-        var endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('{id}', shipment_id);
-        endpoint.pathname += '/costs';
-
-        return this.manager.get(endpoint, CostModel, { access_token: this.manager.access_token.toString() });
+        return this.fetch(shipment_id || this.id, { access_token: this.manager.access_token.toString() }, this.endpointCosts, CostModel);
     }
 
 }

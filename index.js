@@ -191,6 +191,9 @@ const Meli        = (function() {
                 resource = 'messages';
             } else {
                 resource = parts.shift();
+                if (!resource) {
+                    resource = parts.shift();
+                }
                 id = parts.join('/');
             }
 
