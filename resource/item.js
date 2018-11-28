@@ -8,7 +8,7 @@ class Item extends require('./base') {
      * @return {URL}
      */
     get endpoint() {
-        var endpoint = this.manager.endpoint;
+        let endpoint = this.manager.endpoint;
         endpoint.pathname = '/items/{id}';
         return endpoint;
     }
@@ -35,48 +35,47 @@ class Item extends require('./base') {
         }
     }
 
-    search(user_id, params, per_page, page) {
-        // @TODO replace this with a request from users resources
-        var endpoint = this.manager.endpoint;
+    search(user_id, params, per_page, offset, scroll_id) {
+        let endpoint = this.manager.endpoint;
         endpoint.pathname = '/users/{user_id}/items/search'.replace('{user_id}', user_id);
 
-        if (!per_page) per_page = 50;
-        if (!page) page = 1;
+        if (!per_page) per_page = 100;
         if (!params) params = {};
+        if (user_id) params.seller_id = user_id;
+        if (offset) params.offset = offset;
+        if (scroll_id) params.scroll_id = scroll_id;
 
-        params.offset = (per_page * (page - 1));
+        params.search_type = 'scan';
         params.limit  = per_page;
-
-        return this.manager.get(endpoint, ItemModel, params);
+        return this.manager.get(endpoint, this.model, params);
     }
 
     all(user_id, params) {
-        var self = this;
+        let self = this;
 
         return new Promise(function(resolve, reject) {
-            var page = 1, items = [], promiseTail;
+            let questions = [];
 
             if (!user_id) {
                 throw new Error('user_id parameter is required');
             }
 
-            var load = function(page) {
-                return promiseTail = self.search(user_id, params, 100, page).then(process);
+            let load = function(scroll_id) {
+                return self.search(user_id, params, 100, undefined, scroll_id).then(process);
             };
 
-            var process = function(result) {
-                result.results.forEach(function(item) {
-                    items.push(item);
-                });
-
-                if (((page) * 100) < result.paging.total) {
-                    page++;
-                    return load(page);
+            let process = function(result) {
+                if (result.questions && result.questions.length) {
+                    result.questions.forEach(function(item) {
+                        questions.push(item);
+                    });
+                    return load(result.scroll_id);
                 }
+                return Promise.resolve(questions);
             };
 
-            return load(page).then(() => {
-                resolve(items);
+            return load().then(() => {
+                resolve(questions);
             }).catch((err) => {
                 reject(err);
             });
