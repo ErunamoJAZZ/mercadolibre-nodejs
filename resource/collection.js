@@ -1,21 +1,20 @@
-const CollectionModel = require('../model/collection');
+const CollectionModel = require("../model/collection");
 
-class Collection extends require('./base') {
-
+class Collection extends require("./base") {
     /**
      * Resource endpoint
-     * 
+     *
      * @return {URL}
      */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/collections/{id}';
+        endpoint.pathname = "/collections/{id}";
         return endpoint;
     }
 
     /**
      * Returns the resource model
-     * 
+     *
      * @return {Model\Base}
      */
     get model() {
@@ -23,10 +22,10 @@ class Collection extends require('./base') {
     }
 
     /**
-    * Collection Constructor
-    *
-    * @param {Meli} manager
-    */
+     * Collection Constructor
+     *
+     * @param {Meli} manager
+     */
     constructor(meli, collection) {
         super(meli);
 

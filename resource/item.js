@@ -1,21 +1,20 @@
-const ItemModel = require('../model/item');
+const ItemModel = require("../model/item");
 
-class Item extends require('./base') {
-    
+class Item extends require("./base") {
     /**
      * Resource endpoint
-     * 
+     *
      * @return {URL}
      */
     get endpoint() {
         let endpoint = this.manager.endpoint;
-        endpoint.pathname = '/items/{id}';
+        endpoint.pathname = "/items/{id}";
         return endpoint;
     }
 
     /**
      * Returns the resource model
-     * 
+     *
      * @return {Model\Base}
      */
     get model() {
@@ -23,10 +22,10 @@ class Item extends require('./base') {
     }
 
     /**
-    * Item Constructor
-    *
-    * @param {Meli} manager
-    */
+     * Item Constructor
+     *
+     * @param {Meli} manager
+     */
     constructor(meli, item) {
         super(meli);
 
@@ -37,7 +36,10 @@ class Item extends require('./base') {
 
     search(user_id, params, per_page, offset, scroll_id) {
         let endpoint = this.manager.endpoint;
-        endpoint.pathname = '/users/{user_id}/items/search'.replace('{user_id}', user_id);
+        endpoint.pathname = "/users/{user_id}/items/search".replace(
+            "{user_id}",
+            user_id,
+        );
 
         if (!per_page) per_page = 100;
         if (!params) params = {};
@@ -45,8 +47,8 @@ class Item extends require('./base') {
         if (offset) params.offset = offset;
         if (scroll_id) params.scroll_id = scroll_id;
 
-        params.search_type = 'scan';
-        params.limit  = per_page;
+        params.search_type = "scan";
+        params.limit = per_page;
         return this.manager.get(endpoint, this.model, params);
     }
 
@@ -57,11 +59,13 @@ class Item extends require('./base') {
             let questions = [];
 
             if (!user_id) {
-                throw new Error('user_id parameter is required');
+                throw new Error("user_id parameter is required");
             }
 
             let load = function(scroll_id) {
-                return self.search(user_id, params, 100, undefined, scroll_id).then(process);
+                return self
+                    .search(user_id, params, 100, undefined, scroll_id)
+                    .then(process);
             };
 
             let process = function(result) {
@@ -74,11 +78,13 @@ class Item extends require('./base') {
                 return Promise.resolve(questions);
             };
 
-            return load().then(() => {
-                resolve(questions);
-            }).catch((err) => {
-                reject(err);
-            });
+            return load()
+                .then(() => {
+                    resolve(questions);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
         });
     }
 }

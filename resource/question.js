@@ -1,21 +1,20 @@
-const QuestionModel = require('../model/question');
+const QuestionModel = require("../model/question");
 
-class Question extends require('./base') {
-    
+class Question extends require("./base") {
     /**
      * Resource endpoint
-     * 
+     *
      * @return {URL}
      */
     get endpoint() {
         let endpoint = this.manager.endpoint;
-        endpoint.pathname = '/questions/{id}';
+        endpoint.pathname = "/questions/{id}";
         return endpoint;
     }
 
     /**
      * Returns the resource model
-     * 
+     *
      * @return {Model\Base}
      */
     get model() {
@@ -23,10 +22,10 @@ class Question extends require('./base') {
     }
 
     /**
-    * Question Constructor
-    *
-    * @param {Meli} manager
-    */
+     * Question Constructor
+     *
+     * @param {Meli} manager
+     */
     constructor(meli, question) {
         super(meli);
 
@@ -37,7 +36,7 @@ class Question extends require('./base') {
 
     search(user_id, params, per_page, offset, scroll_id) {
         let endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('/{id}', '/search');
+        endpoint.pathname = endpoint.pathname.replace("/{id}", "/search");
 
         if (!per_page) per_page = 100;
         if (!params) params = {};
@@ -45,8 +44,8 @@ class Question extends require('./base') {
         if (offset) params.offset = offset;
         if (scroll_id) params.scroll_id = scroll_id;
 
-        params.search_type = 'scan';
-        params.limit  = per_page;
+        params.search_type = "scan";
+        params.limit = per_page;
         return this.manager.get(endpoint, this.model, params);
     }
 
@@ -57,11 +56,13 @@ class Question extends require('./base') {
             let questions = [];
 
             if (!user_id) {
-                throw new Error('user_id parameter is required');
+                throw new Error("user_id parameter is required");
             }
 
             let load = function(scroll_id) {
-                return self.search(user_id, params, 100, undefined, scroll_id).then(process);
+                return self
+                    .search(user_id, params, 100, undefined, scroll_id)
+                    .then(process);
             };
 
             let process = function(result) {
@@ -74,11 +75,13 @@ class Question extends require('./base') {
                 return Promise.resolve(questions);
             };
 
-            return load().then(() => {
-                resolve(questions);
-            }).catch((err) => {
-                reject(err);
-            });
+            return load()
+                .then(() => {
+                    resolve(questions);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
         });
     }
 }

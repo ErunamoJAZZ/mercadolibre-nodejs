@@ -1,22 +1,21 @@
-const OrderModel = require('../model/order');
-const FeedbackModel = require('../model/feedback');
+const OrderModel = require("../model/order");
+const FeedbackModel = require("../model/feedback");
 
-class Order extends require('./base') {
-    
+class Order extends require("./base") {
     /**
      * Resource endpoint
-     * 
+     *
      * @return {URL}
      */
     get endpoint() {
         var endpoint = this.manager.endpoint;
-        endpoint.pathname = '/orders/{id}';
+        endpoint.pathname = "/orders/{id}";
         return endpoint;
     }
 
     /**
      * Returns the resource model
-     * 
+     *
      * @return {Model\Base}
      */
     get model() {
@@ -24,10 +23,10 @@ class Order extends require('./base') {
     }
 
     /**
-    * Order Constructor
-    *
-    * @param {Meli} manager
-    */
+     * Order Constructor
+     *
+     * @param {Meli} manager
+     */
     constructor(meli, order) {
         super(meli);
 
@@ -38,11 +37,14 @@ class Order extends require('./base') {
 
     feedback(order, form) {
         if (order === undefined || form === undefined) {
-            throw new Error('All the parameters are required, please set all of them: feedback(order, form)');
+            throw new Error(
+                "All the parameters are required, please set all of them: feedback(order, form)",
+            );
         }
 
         var endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace('{id}', order) + '/feedback';
+        endpoint.pathname =
+            endpoint.pathname.replace("{id}", order) + "/feedback";
         return this.manager.post(endpoint, form, FeedbackModel);
     }
 }
