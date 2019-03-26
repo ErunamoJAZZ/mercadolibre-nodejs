@@ -35,10 +35,10 @@ class SizeChart extends require("./base") {
         }
     }
 
-    updateItems(id, items) {
-        let endpoint = this.endpoint;
-        endpoint.pathname = endpoint.pathname.replace("{id}/items", id);
-        return this.manager.put(endpoint, items, this.model);
+    updateItems(id, params) {
+        let endpoint = this.endpointItems;
+        endpoint.pathname = endpoint.pathname.replace("{id}", id);
+        return this.manager.put(endpoint, params, this.model);
     }
 }
 
