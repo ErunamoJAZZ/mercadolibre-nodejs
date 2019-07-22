@@ -4,6 +4,8 @@
 
 > npm install --save mercadolibre-nodejs
 
+> yarn add mercadolibre-nodejs
+
 ### Usage
 
 ```js

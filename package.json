@@ -1,6 +1,6 @@
 {
     "name": "mercadolibre-nodejs",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "description": "NodeJS wrapper for mercadolibre API communication",
     "url": "https://github.com/pentagramacs/mercadolibre-nodejs",
     "main": "index.js",
@@ -23,10 +23,10 @@
     "author": "Victor Moura <victor.moura@pentagrama.com.br>",
     "license": "MIT",
     "dependencies": {
-        "eslint": "^6.0.1",
         "request": "^2.88.0"
     },
     "devDependencies": {
+        "eslint": "^6.0.1",
         "jest": "^24.8.0"
     }
 }
